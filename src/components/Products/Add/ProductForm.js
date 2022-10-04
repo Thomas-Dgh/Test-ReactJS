@@ -9,7 +9,11 @@ import {
   Label,
 } from "reactstrap";
 import { getMultiSelected, repeat } from "../../../utils";
-import { isCategoriesValid, isNameValid } from "./validators";
+import {
+  isCategoriesValid,
+  isNameValid,
+  isMinimalExpirationDate,
+} from "../Update/validators";
 
 const ProductForm = (props) => {
   const { product = {} } = props;
@@ -24,24 +28,6 @@ const ProductForm = (props) => {
   );
   const [featured, setFeatured] = useState(product.featured);
 
-  // EXPIRATION DATE
-  let minimalExpirationDate = new Date();
-  minimalExpirationDate = formatDate(
-    minimalExpirationDate.setDate(minimalExpirationDate.getDate() + 30)
-  ); // NOW + 30D
-
-  function formatDate(date) {
-    let d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
-  }
-
   const onSubmit = (e) => {
     e.preventDefault();
     props.onSave({
@@ -55,6 +41,8 @@ const ProductForm = (props) => {
       featured,
     });
   };
+
+
 
   return (
     <Form onSubmit={onSubmit}>
@@ -84,7 +72,6 @@ const ProductForm = (props) => {
           value={brand}
           onChange={({ target }) => setBrand(target.value)}
         />
-        <FormFeedback>Brand is required</FormFeedback>
       </FormGroup>
       <FormGroup>
         <Label for="rating">Rating</Label>
@@ -146,8 +133,7 @@ const ProductForm = (props) => {
           name="expirationDate"
           id="expirationDate"
           value={expirationDate}
-          invalid={!isCategoriesValid(expirationDate)}
-          min={minimalExpirationDate}
+          invalid={!isMinimalExpirationDate(expirationDate)}
           onChange={({ target }) => setExpirationDate(target.value)}
         />
         <FormFeedback>
