@@ -4,10 +4,14 @@ import PropTypes from "prop-types";
 import { getProductById } from "../../../reducers/products";
 import ProductForm from "./ProductForm";
 import { Link } from "react-router-dom";
+import { updateProductForm } from "../../../actions/products";
 
 class UpdateFormContainer extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
-    const { product, categories } = this.props;
+    const { product, categories, productId, dispatch } = this.props;
 
     if (!product) {
       return null;
@@ -17,7 +21,9 @@ class UpdateFormContainer extends Component {
       <>
         <Link to="/">Home</Link>
         <ProductForm
-          onSave={(data) => {
+          onSave={(product) => {
+            dispatch(updateProductForm(productId, product));
+          //  console.log(product)
             return;
           }}
           product={product}

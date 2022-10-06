@@ -8,11 +8,16 @@ import {
   Input,
   Label,
 } from "reactstrap";
-import { getMultiSelected, repeat } from "../../../utils";
-import { isCategoriesValid, isNameValid } from "./validators";
+import { getMultiSelected, repeat, generateId } from "../../../utils";
+import {
+  isCategoriesValid,
+  isNameValid,
+  isMinimalExpirationDate,
+} from "./validators";
 
 const ProductForm = (props) => {
   const { product = {} } = props;
+  const [id, setId] = useState(product.id || generateId());
   const [name, setName] = useState(product.name || "");
   const [brand, setBrand] = useState(product.brand || "");
   const [rating, setRating] = useState(product.rating || 0);
@@ -22,8 +27,25 @@ const ProductForm = (props) => {
   const [expirationDate, setExpirationDate] = useState(
     product.expirationDate || ""
   );
-  const [featured, setFeatured] = useState(product.featured);
+  const [featured, setFeatured] = useState(product.featured || "");
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    // console.log(product)
+    props.onSave({
+      id,
+      name: name,
+      brand: brand,
+      rating: rating,
+      categories: categories,
+      itemsInStock: itemsInStock,
+      receiptDate: receiptDate,
+      expirationDate: expirationDate,
+      featured: featured,
+    });
+    
+  };
+  
   // EXPIRATION DATE
   let minimalExpirationDate = new Date();
   minimalExpirationDate = formatDate(
@@ -42,19 +64,14 @@ const ProductForm = (props) => {
     return [year, month, day].join("-");
   }
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    props.onSave({
-      name,
-      brand,
-      rating,
-      categories,
-      itemsInStock,
-      receiptDate,
-      expirationDate,
-      featured,
-    });
-  };
+
+  //rating > 8
+
+  function handleRating(value) {
+
+    setRating(value);
+    value > 8 ? setFeatured(true) : setFeatured(false);
+  }
 
   return (
     <Form onSubmit={onSubmit}>
@@ -89,16 +106,11 @@ const ProductForm = (props) => {
       <FormGroup>
         <Label for="rating">Rating</Label>
         <Input
-          required
           type="select"
           name="rating"
           id="rating"
           value={rating}
-          onChange={({ target }) => {
-            setRating(target.value);
-            if (target.value > 8) setFeatured(true);
-            else setFeatured(false);
-          }}
+          onChange={({ target }) => handleRating(target.value)}
         >
           {repeat(11).map((v) => (
             <option key={v} value={v}>
@@ -146,7 +158,7 @@ const ProductForm = (props) => {
           name="expirationDate"
           id="expirationDate"
           value={expirationDate}
-          invalid={!isCategoriesValid(expirationDate)}
+          invalid={!isMinimalExpirationDate(expirationDate)}
           min={minimalExpirationDate}
           onChange={({ target }) => setExpirationDate(target.value)}
         />
@@ -175,7 +187,6 @@ const ProductForm = (props) => {
           Featured
         </Label>
       </FormGroup>
-
       <Button>Submit</Button>
     </Form>
   );

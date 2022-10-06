@@ -1,21 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import ProductForm from "../Add/ProductForm";
 import { Link } from "react-router-dom";
-import { createProduct } from "../../../actions/products";
+import ProductForm from "../Update/ProductForm";
+import { createProductForm } from "../../../actions/products";
 
 class AddFormContainer extends Component {
   render() {
-    const { categories, dispatch } = this.props;
+    const {product,productId, categories, dispatch } = this.props;
 
     return (
       <>
         <Link to="/">Home</Link>
         <ProductForm
-          onSave={(data) => {
-            dispatch(createProduct(data));
+          onSave={(product) => {
+            dispatch(createProductForm(product));
+         // console.log(product)
           }}
+          product={product}
           categories={categories}
         />
       </>
@@ -24,11 +26,13 @@ class AddFormContainer extends Component {
 }
 
 AddFormContainer.propTypes = {
+  product: PropTypes.object,
   categories: PropTypes.array,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { productId }) => {
   return {
+    products: state.products,
     categories: state.categories,
   };
 };

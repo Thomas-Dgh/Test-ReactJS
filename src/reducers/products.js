@@ -15,21 +15,25 @@ export function products(state = [], action) {
     case productsActions.UPDATE_PRODUCT:
       return state.map((item) => {
         if (item.id === action.productId) {
+          console.log(item.id);
           return {
             ...item,
             ...action.data,
-            featured: isFeatured(action.data)
-          }
+            id: action.productId,
+            featured: isFeatured(action.data),
+          };
         }
         return item;
       });
     case productsActions.CREATE_PRODUCT:
-      return state.concat([{
-        ...action.data,
-        id: generateId(),
-        featured: isFeatured(action.data),
-        createdAt: moment().format(),
-      }]);
+      return state.concat([
+        {
+          ...action.data,
+          id: generateId(),
+          featured: isFeatured(action.data),
+          createdAt: moment().format(),
+        },
+      ]);
     default:
       return state;
   }
