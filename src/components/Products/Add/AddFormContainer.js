@@ -7,7 +7,7 @@ import { createProductForm } from "../../../actions/products";
 
 class AddFormContainer extends Component {
   render() {
-    const {product,productId, categories, dispatch } = this.props;
+    const {product, categories, dispatch } = this.props;
 
     return (
       <>

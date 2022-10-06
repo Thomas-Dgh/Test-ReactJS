@@ -7,9 +7,6 @@ import { Link } from "react-router-dom";
 import { updateProductForm } from "../../../actions/products";
 
 class UpdateFormContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     const { product, categories, productId, dispatch } = this.props;
 

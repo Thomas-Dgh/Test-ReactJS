@@ -17,7 +17,7 @@ import {
 
 const ProductForm = (props) => {
   const { product = {} } = props;
-  const [id, setId] = useState(product.id || generateId());
+  const [id] = useState(product.id || generateId());
   const [name, setName] = useState(product.name || "");
   const [brand, setBrand] = useState(product.brand || "");
   const [rating, setRating] = useState(product.rating || 0);
@@ -31,7 +31,7 @@ const ProductForm = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // console.log(product)
+   console.log(product)
     props.onSave({
       id,
       name: name,
