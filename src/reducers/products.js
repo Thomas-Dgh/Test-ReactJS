@@ -15,7 +15,7 @@ export function products(state = [], action) {
     case productsActions.UPDATE_PRODUCT:
       return state.map((item) => {
         if (item.id === action.productId) {
-          console.log(item.id);
+        //  console.log(item.id);
           return {
             ...item,
             ...action.data,

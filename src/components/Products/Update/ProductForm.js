@@ -31,7 +31,7 @@ const ProductForm = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-   console.log(product)
+   //console.log(product)
     props.onSave({
       id,
       name: name,
